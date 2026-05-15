@@ -187,6 +187,8 @@
         @csrf
         @method('PUT')
 
+        <input type="hidden" name="type" value="{{ old('type', $item->type) }}">
+        
         <div class="form-card">
             <div class="form-card-header">
                 <div class="form-card-header-icon">

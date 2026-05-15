@@ -208,9 +208,13 @@
             flex-shrink: 0;
         }
 
+        .nav-user {
+            position: relative;
+        }
+
         .nav-dropdown {
             position: absolute;
-            top: calc(100% + 8px);
+            top: 100%;
             right: 0;
             background: var(--white);
             border: 1.5px solid var(--border);
@@ -222,8 +226,10 @@
             z-index: 200;
         }
 
-        .nav-user:hover .nav-dropdown { display: block; }
-
+        .nav-user:hover .nav-dropdown,
+        .nav-user:focus-within .nav-dropdown {
+            display: block;
+        }
         .dropdown-item {
             display: flex;
             align-items: center;
@@ -509,9 +515,18 @@
 
     <!-- CONTENT -->
     <main class="page-container">
-        @if(session('success'))
-        <div class="alert alert-success">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+       @if(session('success'))
+        <div
+            x-data="{ show: true }"
+            x-init="setTimeout(() => show = false, 3000)"
+            x-show="show"
+            x-transition
+            class="alert alert-success"
+        >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+
             {{ session('success') }}
         </div>
         @endif

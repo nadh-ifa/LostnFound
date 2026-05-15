@@ -352,44 +352,20 @@
                 <p class="detail-desc">{{ $item->description }}</p>
             </div>
         </div>
+        
+        <script>
+            window.authUserName = @json(auth()->check() ? auth()->user()->name : 'User');
+        </script>
 
+        <div id="comment-app">
         <!-- COMMENTS -->
-        @if(isset($item->comments))
-        <div class="comments-card">
-            <div class="comments-title">
-                <svg viewBox="0 0 24 24"><path d="M21 6.5C21 5.12 19.88 4 18.5 4h-13C4.12 4 3 5.12 3 6.5v8C3 15.88 4.12 17 5.5 17H8l3 3 3-3h4.5c1.38 0 2.5-1.12 2.5-2.5v-8z"/></svg>
-                Komentar
-                <span class="comment-count">{{ $item->comments->count() }}</span>
-            </div>
+    <comment-section
+        :item-id="{{ $item->id }}"
+        :initial-comments='@json($item->comments->load("user"))'
+    >
+    </comment-section>
 
-            @forelse($item->comments as $comment)
-            <div class="comment-item">
-                <div class="comment-avatar">{{ strtoupper(substr($comment->user->name, 0, 2)) }}</div>
-                <div>
-                    <span class="comment-author">{{ $comment->user->name }}</span>
-                    <span class="comment-date">{{ $comment->created_at->diffForHumans() }}</span>
-                    <p class="comment-text">{{ $comment->comment }}</p>
-                </div>
-            </div>
-            @empty
-            <p style="font-size:0.85rem; color:var(--text-light); text-align:center; padding:1rem 0;">
-                Belum ada komentar.
-            </p>
-            @endforelse
-
-            @auth
-            <form action="{{ route('comments.store', $item->id) }}" method="POST" class="comment-form">
-                @csrf
-                <input type="text" name="comment" class="form-control" placeholder="Tulis komentar..." maxlength="500" required>
-                <button type="submit" class="btn btn-primary btn-sm">Kirim</button>
-            </form>
-            @else
-            <p style="font-size:0.82rem; color:var(--text-light); margin-top:0.75rem;">
-                <a href="{{ route('login') }}" style="color:var(--red);">Masuk</a> untuk menulis komentar.
-            </p>
-            @endauth
-        </div>
-        @endif
+</div>
     </div>
 
     <!-- SIDEBAR -->
